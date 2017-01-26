@@ -1,0 +1,154 @@
+  <!-- DataTables CSS -->
+<link rel="stylesheet" href="<?php echo $this->basePath() ?>/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath()?>/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath()?>/css/dataTables.tableTools.css">
+<!--Ventanas emergentes -->
+<script src="<?php echo $this->basePath()?>/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath()?>/sweetalert/dist/sweetalert.css">
+
+<!-- DataTables -->
+<script src="<?php echo $this->basePath()?>/js/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf8" src="<?php echo $this->basePath()?>/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="<?php echo $this->basePath()?>/js/dataTables.tableTools.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Orbitron:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
+<div class="container">
+
+  <?php $id =  $this->all[0][id] ?>
+
+<div class="row">
+   <div class="col-md-10 col-xs-offset-1">
+    <div class="panel panel-default" >
+      <div class="panel-heading"> <h2 class="panel-title text-center"><span class="glyphicon glyphicon-user" aria-hidden="true"> Bienvenido <span class="glyphicon glyphicon-user" aria-hidden="true"></h2> </div>
+      <div class="panel-body">
+        <div class="alert alert-info text-center" role="alert"><h5>Datos de usuario</h5></div>
+        <form class="form-horizontal" id="change_pass">
+          <div class="form-group">
+            <label for="usuario" class="col-sm-4  control-label" >Usuario</label>
+            <div class="col-sm-4 ">
+              <input type="text" class="form-control text-center" id="usuario" value="<?php echo $this->Usuarios ?>" disabled>
+            </div>
+            <button class="btn btn-info" onclick="edit_pass()" id="btn_edit">Editar contraseña</button>
+          </div>
+          <div class="form-group">
+            <label for="password" class="col-sm-4 control-label hide" id="pass1">Password</label>
+            <div class="col-sm-4">
+              <input type="password" class="form-control text-center hide" name="pass" id="pass2" placeholder="Nueva Contraseña">
+              <input type="hidden" name="id_usr" value="<?php echo $this->all[0][id] ?>">
+            </div>
+            <button type="button" class="btn btn-danger hide" onclick="cancelar(<?php echo $id ?>)" id="cancela" >Cancelar</button>
+
+          </div>
+        </form>
+        <div class="alert alert-success text-center" role="alert"><h5>Datos personales</h5></div>
+        <form class="form-horizontal" id="personal_data">
+            <div class="col-md-6">
+            <div class="col-md-12">
+            <label for="nombre_usr" class="col-sm-2 control-label" >Nombre</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control text-center" id="nombre_usr" name="nombre_usr" value="<?php echo $this->all[0][emp_nombre] ?>" disabled><br>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <label for="emp_apat" class="col-sm-2  control-label" >Apellido Paterno</label>
+            <div class="col-sm-9 ">
+              <input type="text" class="form-control text-center" id="emp_apat" name="emp_apat" value="<?php echo $this->all[0][emp_apat] ?>" disabled><br>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <label for="emp_amat" class="col-sm-2  control-label" >Apellido materno</label>
+            <div class="col-sm-9 ">
+              <input type="text" class="form-control text-center" id="emp_amat" name="emp_amat" value="<?php echo $this->all[0][emp_amat] ?>" disabled><br>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <label for="emp_email" class="col-sm-2  control-label" >Correo</label>
+            <div class="col-sm-9 ">
+              <input type="text" class="form-control text-center" id="emp_email" name="emp_email" value="<?php echo $this->all[0][emp_email] ?>" disabled><br>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <label for="emp_cel" class="col-sm-2  control-label" >Teléfono celular</label>
+            <div class="col-sm-9 ">
+              <input type="text" class="form-control text-center" id="emp_cel" name="emp_cel" value="<?php echo $this->all[0][emp_cel] ?>" disabled><br>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <label for="emp_tel" class="col-sm-2  control-label" >Teléfono casa</label>
+            <div class="col-sm-9 ">
+              <input type="text" class="form-control text-center" id="emp_tel" name="emp_tel" value="<?php echo $this->all[0][emp_tel] ?>" disabled><br>
+            </div>
+            </div>
+            </div>
+              <div class="col-md-6">
+              <div class="col-md-12">
+              <label for="emp_calle_no" class="col-sm-2 control-label" >Calle</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control text-center" id="emp_calle_no" name="emp_calle_no" value="<?php echo $this->all[0][emp_calle_no] ?>" disabled><br>
+              </div>
+              </div>
+              <div class="col-md-12">
+              <label for="emp_colonia" class="col-sm-2  control-label" >Colonia</label>
+              <div class="col-sm-9 ">
+                <input type="text" class="form-control text-center" id="emp_colonia" name="emp_colonia" value="<?php echo $this->all[0][emp_colonia] ?>" disabled><br>
+              </div>
+              </div>
+              <div class="col-md-12">
+              <label for="ef_clave" class="col-sm-2  control-label" >Estado</label>
+              <div class="col-sm-9 text-center">
+                <select class="form-control text-center" name="ef_clave" id="ef_clave" disabled>
+                  <option value="<?php echo $this->all[0][ef_clave] ?>"><?php echo $this->all[0][ef_nombre]?></option>
+                  <?php foreach($this->estado as $enti) {?>
+                    <option value="<?php echo $enti['idEle1'] ?>"><?php echo $enti['nomEle2'] ?></option>
+                    <?php } ?>
+                </select><br>
+              </div>
+              </div>
+              <div class="col-md-12">
+              <label for="mun_clave" class="col-sm-2  control-label" >Municipio</label>
+              <div class="col-sm-9 text-center">
+                <select class="form-control text-center" name="mun_clave" id="mun_clave" disabled>
+                  <option class="text-center" value="<?php echo $this->all[0][mun_clave] ?>"><?php echo $this->all[0][mun_nombre]?></option>
+                    <option value=""></option>
+                </select><br>
+              </div>
+              </div>
+              <div class="col-md-12">
+              <label for="emp_fec_nac" class="col-sm-2  control-label" >Fecha nac.</label>
+              <div class="col-sm-9 ">
+                <input type="text" class="form-control text-center date_pick " id="emp_fec_nac" name="emp_fec_nac" value="<?php echo $this->all[0][emp_fec_nac] ?>" disabled><br>
+              </div>
+              <input type="text" class="hide" name="emp_clave" value="<?php echo $this->all[0][emp_clave] ?>">
+              </div>
+              <div class="col-md-12 text-right col-sm-8">
+                <button type="button" class="btn btn-info" onclick="edit_data()" id="edit">Editar datos</button>
+              </div>
+              <div class="col-md-12" id="mensaje"></div>
+              </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+
+<script src="<?php echo $this->basePath()?>/js/jsEditUser/edit_user.js"></script>
+<script type="text/javascript">
+var baseRut = "<?php echo $this->basePath()?>";
+</script>
+<!-- fecha -->
+<link rel="stylesheet" href="<?php echo $this->basePath() ?>/css/datetimepicker.css">
+<script src="<?php echo $this->basePath() ?>/js/jquery.datetimepicker.js"></script>
+<?php //echo var_dump($this->cat_municipio) ?>
+<script type="text/javascript">
+var baseRut = "<?php echo $this->basePath()?>";
+ $(function() {
+    $( ".date_pick").datetimepicker({
+      format:'Y-m-d'
+    });
+  });
+</script>
+<?php //echo var_dump($this->all); ?>

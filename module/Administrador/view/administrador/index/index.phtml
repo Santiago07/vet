@@ -1,0 +1,180 @@
+  <!-- DataTables CSS -->
+<link rel="stylesheet" href="<?php echo $this->basePath() ?>/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath()?>/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $this->basePath()?>/css/dataTables.tableTools.css">
+
+<!-- DataTables -->
+<script src="<?php echo $this->basePath()?>/js/jquery-ui.js"></script>
+<script type="text/javascript" charset="utf8" src="<?php echo $this->basePath()?>/js/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="<?php echo $this->basePath()?>/js/dataTables.tableTools.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Orbitron:400,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
+<div class="container">
+
+
+<div class="row">
+   <div class="col-xs-4 col-xs-offset-4">
+    <div class="panel panel-default" >
+      <div class="panel-heading"> <h2 class="panel-title text-center"><span class="glyphicon glyphicon-user" aria-hidden="true"> Bienvenido <span class="glyphicon glyphicon-user" aria-hidden="true"></h2> </div>
+      <div class="panel-body" style="text-align:center">
+
+        <p class="text-center" ></span></p>
+        <p>Usuario : <strong><?php echo $this->Usuarios?></strong> </p>
+        <p>Nombre : <strong><?php echo $this->Empleado[0]['emp_nombre']?></strong></p>
+        <p>Apellidos : <strong><?php echo $this->Empleado[0]['emp_apat']." ".$this->Empleado[0]['emp_amat']?></strong></p>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+
+
+  <!-- <p class="text-right"><button type="button" class="btn btn-info" id="add__person__12">Nuevo registro</button></p>
+ -->
+<!--   <div>
+    <div class="alert alert-info" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p class="text-center">Aun no tiene actividades pendientes</p>
+    </div>
+
+    <div class="alert alert-success" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p class="text-center">Actividades pendientes</p>
+    </div>
+  </div> -->
+
+
+
+
+
+
+
+<!-- </div> -->
+
+<!-- Modal -->
+
+
+
+
+<!-- End Modal -->
+
+
+<script type="text/javascript">
+  $(document).ready( function () {
+      $('#table_id').DataTable( {
+          dom: 'T<"clear">lfrtip',
+          tableTools: {
+              "sSwfPath": "<?php echo $this->basePath()?>/img/copy_csv_xls_pdf.swf"
+          }
+      } );
+  } );
+  $(document).ready( function () {
+      $('#table_idd').DataTable( {
+          dom: 'T<"clear">lfrtip',
+          tableTools: {
+              "sSwfPath": "<?php echo $this->basePath()?>/img/copy_csv_xls_pdf.swf"
+          }
+      } );
+  } );
+
+  $('#estado').change(function(){
+
+      var valor = $(this).val();
+          var ajax = $.ajax({
+             type: "GET",
+             url: "<?php echo $this->basePath()?>/administrador/index/getmunicipios/" + $(this).val(),
+             async: true,
+             dataType: "json",
+             beforeSend: function(x) {
+                if(x && x.overrideMimeType) {
+                   x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+             },
+             success: function(data){
+                var options = '';
+
+                   for (var i = 0; i < data.length; i++) {
+                      console.log(data[i].idmunicipio);
+                      options += '<option value="' + data[i].idmunicipio + '">' + data[i].municipio + '</option>';
+                   }
+                   $('#municipioss').html(options);
+                   $('#municipioss').removeAttr('disabled');
+                   // if (valor==''){
+                   //  options += '<option value="">Seleccione una opción</option>';
+                   //  $('#municipioss').html(options);
+                   //  $('#municipioss').attr('disabled', 'disabled');
+                   // }
+             }
+        });
+      });
+
+  $('#assocPersona').submit(function(e){
+    e.preventDefault();
+    var postData = $("#assocPersona").serialize();
+    var formURL = "<?php echo $this->basePath()?>/administrador/index/insertasociado";
+    $('#myModal').modal('show');
+    $.ajax({
+      url : formURL,
+      type: "POST",
+      data : postData,
+      dataType: "json",
+      beforeSend: function(x) {
+        if(x && x.overrideMimeType) {
+                    }
+          $("#conteMensj").html('<center> Espere un momento.... </center>');
+      },
+      success:function(data) {
+        $("#conteMensj").html('<div class="alert alert-success" role="alert"> <p class="text-center"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> '+data.Mensaje+'<p></div>');
+        // $("#conteMensj").html('<p class="bg-success"> '+data.Mensaje+"</p>");
+        $("#logg").val(data.infoUser['login']);
+        $("#keys").val(data.infoUser['key']);
+        setTimeout(function() {
+                     $(".forA").val("");
+                  },600);
+        },
+        error: function(jqXHR, exception) {
+            var complemento;
+            if (jqXHR.status === 0) {
+                complemento ='No hay coneccion.\n Verifica tu conección.';
+                } else if (jqXHR.status == 404) {
+                    complemento ='Respuesta fallida';
+                } else if (jqXHR.status == 500) {
+                    complemento ='Error interno del servidor [500]';
+                } else if (exception === 'parsererror') {
+                    complemento ='Error interno, consulta con el área de sistemas';
+                } else if (exception === 'timeout') {
+                    complemento= 'Demasiado tiempo de espera';
+                } else if (exception === 'abort') {
+                    complemento= 'Petición abortada';
+                } else {
+                    complemento= 'NO detectadO\n'+jqXHR.responseText;
+                }
+                $("#conteMensj").html("<h4 style='color: red;'><span class='glyphicon glyphicon-warning-sign' aria-hidden='true'></span> Evento inesperado : "+complemento+"</h4><br><small style='color:red;'>Si este problema continúa, póngase en contacto con el administrador</small>");
+                }
+            });
+
+  });
+
+
+  function limpiar(){
+    $("#logg, #keys").val("");
+    $("##conteMensj").html();
+  }
+
+  $( "#add__person__12" ).click(function() {
+    // alert("Hola");
+    $( "#addForm3" ).slideToggle( "slow" );
+  });
+
+
+
+
+</script>

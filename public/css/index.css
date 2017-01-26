@@ -1,0 +1,53 @@
+#contenido{
+	margin-top:2%;
+	overflow: hidden;
+}
+#login, #nuevo {
+	width: 50%;
+}
+h1 {
+	color: #d31145;
+}
+a.btn.btn-primary {
+margin-left: 25%;
+margin-top: 5%;
+}
+.form-list >li {
+display: inline-block;
+width: 308px;
+margin: 0 0 40px 20px;
+vertical-align: top;
+}
+.form-group {
+width: 22%;;
+float: left;
+margin: 1%;
+}
+label {
+	font-family: Arial;
+font-size: 13px;
+}
+.formulario {
+overflow: hidden;
+}
+h2, h3, h4 {
+	color: #009045;
+}
+ul.nav.nav-pills {
+margin-top: 2%;
+float: right;
+}
+a.even {
+color: #fff;
+}
+a.even:hover {
+	color: #fff;
+}
+
+.slideshow{
+	float: left;
+	width: 60%;
+}
+div#osx-container{
+	z-index: 1060;
+}
