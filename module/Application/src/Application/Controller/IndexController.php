@@ -113,13 +113,17 @@ class IndexController extends AbstractActionController
 						$perm_usr			= $permisos_usr->permiso_usuario($arreglo->idCat_Usuarios);
 						$permisos			= new CatPermiso($this->dbAdapter);
 						$allpermisos	=	$permisos->allpermisos();
+						$permisosUsuarios= array();
+	          $permisosUsuarios['idCat_Usuarios']=$authAdapter->getResultRowObject()->idCat_Usuarios;
+	          $permisosUsuarios['NombreUsuario']=$authAdapter->getResultRowObject()->NombreUsuario;
+						$permisosUsuarios['idCat_Empleado']=$authAdapter->getResultRowObject()->idCat_Empleado;
 						$datos				= array();
 
 						//Compara todos los permisos
 						foreach ($perm_usr as $arre) {
 							$datos[$arre['ClavePermiso']]	=	$arre['ClavePermiso'];
 						}
-
+						//var_dump($permisosUsuarios);
 						//Verifica cuáles son los permisos del usuario
 	          for ($i=0; $i < count($allpermisos) ; $i++) {
 	            $permisosUsuarios[''.$allpermisos[$i]['ClavePermiso'].'']=(array_key_exists($allpermisos[$i]['ClavePermiso'], $datos))?'1':'0';

@@ -53,29 +53,20 @@ class IndexController extends AbstractActionController
         $this->auth = new AuthenticationService();
   }
 
-  // Luis 04/04/2016
   public function indexAction(){
-		// $this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
-		// $auth = $this->auth;
-		// @$identi=$auth->getStorage()->read();
-		// //echo var_dump($identi);
-		// if ($identi!=true || $identi->Inic!=1){
-		// 	return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/administrador/index/logout');
-		// }
-			//$empledo_id = new Catempleados($this->dbAdapter);
-			//$empleado 	= $empledo_id->infoempleado($identi->emp_clave);
-
-	// echo var_dump($identi);
-      //$this->menuspermisos($identi);
-      //$layout = new ViewModel(array(
-        // 'Estados'		=>"generos",
-        // 'Usuarios'	=>$identi->usuario,
-				// 'Empleado'	=>$empleado
-        // ));
+		$this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+		$auth = $this->auth;
+		@$identi=$auth->getStorage()->read();
+		//echo var_dump($identi);
+		if ($identi!=true || $identi->Index!=1){
+			return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/administrador/index/logout');
+		}
+			$identi = (object) $identi;
+			return	new ViewModel(array(
+				'Usuario'		=>	$identi->NombreUsuario
+			));
 
       $this->layout('layout/layout');
-      // $this->layout('layout/layout');
-      return $layout;
 
   }
 
@@ -238,6 +229,17 @@ class IndexController extends AbstractActionController
   $arreglo=array("mensaje" => $mensaje);
   $result = new JsonModel($arreglo);
   return $result;
+ }
+
+ public function catclientesAction(){
+	 $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	 $request = $this->getRequest();
+	 $mensaje = 'Fuera de la funcionalidad';
+	 $auth = $this->auth;
+	 @$identi=$auth->getStorage()->read();
+
+	 $this->layout("layout/layout");
+
  }
 
 
