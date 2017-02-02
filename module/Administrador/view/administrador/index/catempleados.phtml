@@ -2,9 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="box clearfix">
-        <h2 class="text-center">Catálogo de Clientes</h2><br>
+        <h2 class="text-center">Catálogo de Empleados</h2><br>
         <div class="col-md-2">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalForm" onclick="modal('agregar','null')"><span class="glyphicon glyphicon-plus-sign"></span> Agregar Cliente</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalForm" onclick="modal('agregar','null')"><span class="glyphicon glyphicon-plus-sign"></span> Nuevo</button>
         </div>
         <table class="table table-hover" id="bootstrap-table" >
           <thead>
@@ -13,17 +13,19 @@
               <th class="text-center">Teléfono</th>
               <th class="text-center">Correo</th>
               <th class="text-center">Dirección</th>
+              <th class="text-center">Sucursal</th>
               <th class="text-center">Ver</th>
             </tr>
           </thead>
-          <?php foreach ($this->Clientes as  $Cliente) { ?>
+          <?php foreach ($this->Empleados as  $Empleados) { ?>
           <tbody>
             <tr>
-              <td class="text-center" style="text-transform : capitalize"><?php echo $Cliente['NombreCliente']." ".$Cliente['ApeCliente']?></td>
-              <td class="text-center"><?php echo $Cliente['CelularCliente'] ?></td>
-              <td class="text-center"><?php echo $Cliente['CorreoCliente'] ?></td>
-              <td class="text-center" style="text-transform : capitalize"><?php echo "<b>Calle : </b>".$Cliente['DireccionCliente']." <b>Colonia : </b>".$Cliente['ColoniaCliente'] ?></td>
-              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Cliente['idCat_Cliente'] ?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Empleados['NombreEmpleado']." ".$Empleados['ApeEmpleado']?></td>
+              <td class="text-center"><?php echo $Empleados['CelularEmpleado'] ?></td>
+              <td class="text-center"><?php echo $Empleados['CorreoEmpleado'] ?></td>
+              <td class="text-center" style="text-transform : capitalize"><?php echo "<b>Calle : </b>".$Empleados['DireccionEmpleado']." <b>Colonia : </b>".$Empleados['ColoniaEmpleado'] ?></td>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Empleados['NombreSucursal'] ?></td>
+              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Empleados['idCat_Empleado'] ?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
             </tr>
           </tbody>
           <?php } ?>
@@ -42,24 +44,24 @@
         <h4 class="modal-title" id="tituloModal"></h4>
       </div>
       <div class="modal-body">
-        <form id="FormCliente">
+        <form id="FormEmpleado">
           <div class="row">
             <div class="form-group">
               <div class="form-group col-md-3">
                 <label for="recipient-name" class="control-label">Nombre (s)* :</label>
-                <input type="text" class="form-control" style="text-transform:uppercase" name="NombreCliente" id="NombreCliente" required>
+                <input type="text" class="form-control" style="text-transform:uppercase" name="NombreEmpleado" id="NombreEmpleado" required>
               </div>
               <div class="form-group col-md-4">
                 <label for="recipient-name" class="control-label">Apellidos* :</label>
-                <input type="text" class="form-control" style="text-transform:uppercase" name="ApellidosCliente" id="ApellidosCliente" required>
+                <input type="text" class="form-control" style="text-transform:uppercase" name="ApellidosEmpleado" id="ApellidosEmpleado" required>
               </div>
               <div class="form-group col-md-3">
                 <label for="recipient-name" class="control-label">Fecha nacimiento* :</label>
-                <input type="date" class="form-control" name="FecNacCliente" id="FecNacCliente" required>
+                <input type="date" class="form-control" name="FecNacEmpleado" id="FecNacEmpleado" required>
               </div>
               <div class="form-group col-md-2">
                 <label for="recipient-name" class="control-label">Sexo*:</label>
-                <select class="form-control" name="SexoCliente" id="SexoCliente" required>
+                <select class="form-control" name="SexoEmpleado" id="SexoEmpleado" required>
                   <option value="1">Masculino</option>
                   <option value="0">Femenino</option>
                 </select>
@@ -68,29 +70,37 @@
             <div class="form-group">
               <div class="form-group col-md-4">
                 <label for="recipient-name" class="control-label">Correo* :</label>
-                <input type="text" class="form-control" name="CorreoCliente" id="CorreoCliente" required>
-              </div>
-              <div class="form-group col-md-4">
-                <label for="recipient-name" class="control-label">Correo Alterno :</label>
-                <input type="text" class="form-control" name="CorreoAltCliente" id="CorreoAltCliente">
+                <input type="text" class="form-control" name="CorreoEmpleado" id="CorreoEmpleado" required>
               </div>
               <div class="form-group col-md-2">
                 <label for="recipient-name" class="control-label">Celular* :</label>
-                <input type="number" class="form-control" name="CelularCliente" id="CelularCliente" required>
+                <input type="number" class="form-control" name="CelularEmpleado" id="CelularEmpleado" required>
               </div>
               <div class="form-group col-md-2">
-                <label for="recipient-name" class="control-label">Celular Alterno :</label>
-                <input type="number" class="form-control" name="CelularAltCliente" id="CelularAltCliente" >
+                <label for="recipient-name" class="control-label">Teléfono :</label>
+                <input type="number" class="form-control" name="CelularAltEmpleado" id="CelularAltEmpleado" >
+              </div>
+              <div class="form-group col-md-2">
+                <label for="recipient-name" class="control-label">Categoria :</label>
+                <select class="form-control" name="CategoriaEmpleado" id="CategoriaEmpleado">
+                  <option value="0">Selecione</option>
+                  <option value="1">Especialista</option>
+                  <option value="2">Residente</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="recipient-name" class="control-label">Cédula Prof. :</label>
+                <input type="number" class="form-control" name="CedulaProfEmpleado" id="CedulaProfEmpleado" >
               </div>
             </div>
             <div class="form-group">
               <div class="form-group col-md-3">
                 <label for="recipient-name" class="control-label">Calle y número* :</label>
-                <input type="text" class="form-control" style="text-transform:uppercase" name="DireccionCliente" id="DireccionCliente" required>
+                <input type="text" class="form-control" style="text-transform:uppercase" name="DireccionEmpleado" id="DireccionEmpleado" required>
               </div>
               <div class="form-group col-md-3">
                 <label for="recipient-name" class="control-label">Colonia* :</label>
-                <input type="text" class="form-control" style="text-transform:uppercase" name="ColoniaCliente" id="ColoniaCliente" required>
+                <input type="text" class="form-control" style="text-transform:uppercase" name="ColoniaEmpleado" id="ColoniaEmpleado" required>
               </div>
               <div class="form-group col-md-3">
                 <label for="recipient-name" class="control-label">Estado* :</label>
@@ -112,19 +122,38 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="form-group col-md-3 col-md-offset-2">
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Sucursal</label>
+                <select class="form-control" name="Sucursal" id="Sucursal">
+                  <option value="">SELECCIONE</option>
+                  <?php foreach($this->Sucursales as $Sucursal){ ?>
+                  <option value="<?php echo $Sucursal['idCat_Sucursales']?>"><?php echo $Sucursal['NombreSucursal']; ?></option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
                 <br>
                 <input type="text" class="form-control" name="facebook" id="facebook" >
               </div>
               <div class="form-group col-md-3">
                 <br>
-                <input type="text" class="form-control" name="twitter" id="twitter">
-              </div>
-              <div class="form-group col-md-3">
-                <br>
                 <input type="number" class="form-control" name="whatsapp" id="whatsapp">
-                <input type="text" name="cliente_edit"  id="cliente_edit" hidden>
-                <input type="text" name="id_cliente" id="id_cliente" hidden>
+                <input type="text" name="empleado_edit"  id="empleado_edit" hidden>
+                <input type="text" name="id_empleado" id="id_empleado" hidden>
+              </div>
+              <div class="form-group col-md-3" style="text-align : center" id="Est_emp">
+                <label for="recipient-name" class="control-label">Activo :</label>
+                <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusEmpleado" value="1" id="EstatusEmpleado" checked></center>
+              </div>
+            </div>
+            <div class="form-group" id="baja">
+              <div class="form-group col-md-2" style="text-align : center">
+                <label for="recipient-name" class="control-label">Baja :</label>
+                <center><input type="checkbox" class="form-control" style="width:23px" name="BajaEmpleado" value="1" id="BajaEmpleado" ></center>
+              </div>
+              <div class="form-group col-md-10">
+                <label for="recipient-name" class="control-label">Motivo :</label>
+                <textarea class="form-control"  name="BajaMotivoEmpleado" id="BajaMotivoEmpleado" rows="2" value=""></textarea>
               </div>
             </div>
           </div>
@@ -140,19 +169,13 @@
 </div>
 <!-- END MODAL-->
 
-<script src="<?php echo $this->basePath()?>/js/Catalogos/CatClientes.js"></script>
+<script src="<?php echo $this->basePath()?>/js/Catalogos/CatEmpleados.js"></script>
 <style media="screen">
 .mobile {
   margin-top: 3%;
 }
 input#facebook {
     background-image: url(../../img/fb.png);
-    background-repeat: no-repeat;
-    text-indent: 20px;
-    background-size: 17%;
-}
-input#twitter{
-    background-image: url(../../img/tw.png);
     background-repeat: no-repeat;
     text-indent: 20px;
     background-size: 17%;
@@ -170,12 +193,6 @@ input#whatsapp{
   }
   input#facebook {
       background-image: url(../../img/fb.png);
-      background-repeat: no-repeat;
-      text-indent: 20px;
-      background-size: 9%;
-  }
-  input#twitter{
-      background-image: url(../../img/tw.png);
       background-repeat: no-repeat;
       text-indent: 20px;
       background-size: 9%;
@@ -198,12 +215,6 @@ input#whatsapp{
         text-indent: 20px;
         background-size: 5%;
     }
-    input#twitter{
-        background-image: url(../../img/tw.png);
-        background-repeat: no-repeat;
-        text-indent: 20px;
-        background-size: 5%;
-    }
     input#whatsapp{
         background-image: url(../../img/wh.png);
         background-repeat: no-repeat;
@@ -219,12 +230,6 @@ input#whatsapp{
     }
     input#facebook {
         background-image: url(../../img/fb.png);
-        background-repeat: no-repeat;
-        text-indent: 20px;
-        background-size: 6%;
-    }
-    input#twitter{
-        background-image: url(../../img/tw.png);
         background-repeat: no-repeat;
         text-indent: 20px;
         background-size: 6%;
