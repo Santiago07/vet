@@ -20,6 +20,11 @@ use Administrador\Modelo\Entity\CatEstados;
 use Administrador\Modelo\Entity\CatMunicipios;
 use Administrador\Modelo\Entity\CatEmpleados;
 use Administrador\Modelo\Entity\CatSucursales;
+use Administrador\Modelo\Entity\CatPacientes;
+use Administrador\Modelo\Entity\CatEspecies;
+use Administrador\Modelo\Entity\CatRazas;
+use Administrador\Modelo\Entity\CatServicios;
+use Administrador\Modelo\Entity\CatUsuarios;
 
 // Correo
 use Zend\Mail;
@@ -46,8 +51,13 @@ class IndexController extends AbstractActionController
 		if ($identi!=true || $identi->Index!=1){
 			return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().'/administrador/index/logout');
 		}
+
+		$empleado 	= new CatEmpleados($this->dbAdapter);
+		$infoemp		= $empleado->infoempleado($identi->idCat_Empleado);
+
 			return	new ViewModel(array(
-				'Usuario'		=>	$identi->NombreUsuario
+				'Usuario'		=>	$identi->NombreUsuario,
+				'Empleado'	=>	$infoemp
 			));
 
       $this->layout('layout/layout');
@@ -111,8 +121,8 @@ public function sendformAction(){
 		$formulario 		= $request->getPost();
 		if ($formulario['cliente_edit']=='1') {
 			$datos_form			=	array(
-				'NombreCliente'		=>	$formulario['NombreCliente'],
-				'ApeCliente'			=> 	$formulario['ApellidosCliente'],
+				'NombreCliente'		=>	strtoupper($formulario['NombreCliente']),
+				'ApeCliente'			=> 	strtoupper($formulario['ApellidosCliente']),
 				'Sexo'						=> 	$formulario['SexoCliente'],
 				'FechaNacCliente'	=> 	$formulario['FecNacCliente'],
 				'CelularCliente'	=> 	$formulario['CelularCliente'],
@@ -132,8 +142,8 @@ public function sendformAction(){
 		$cliente_acction=	$clientes->updatecliente($datos_form, $formulario['id_cliente']);
 		}else{
 		$datos_form			=	array(
-			'NombreCliente'		=>	$formulario['NombreCliente'],
-			'ApeCliente'			=> 	$formulario['ApellidosCliente'],
+			'NombreCliente'		=>	strtoupper($formulario['NombreCliente']),
+			'ApeCliente'			=> 	strtoupper($formulario['ApellidosCliente']),
 			'Sexo'						=> 	$formulario['SexoCliente'],
 			'FechaNacCliente'	=> 	$formulario['FecNacCliente'],
 			'CelularCliente'	=> 	$formulario['CelularCliente'],
@@ -210,8 +220,8 @@ public function sendformempAction(){
 		$form_emp 	=	$request->getPost();
 		if ($form_emp['empleado_edit']=='1') {
 			$formulario = array(
-				'NombreEmpleado'		=>	$form_emp['NombreEmpleado'],
-				'ApeEmpleado'				=>	$form_emp['ApellidosEmpleado'],
+				'NombreEmpleado'		=>	strtoupper($form_emp['NombreEmpleado']),
+				'ApeEmpleado'				=>	strtoupper($form_emp['ApellidosEmpleado']),
 				'Sexo'							=>	$form_emp['SexoEmpleado'],
 				'DireccionEmpleado'	=>	$form_emp['DireccionEmpleado'],
 				'ColoniaEmpleado'		=>	$form_emp['ColoniaEmpleado'],
@@ -234,8 +244,8 @@ public function sendformempAction(){
 		$empleado_action=	$empleado->updateempleado($formulario, $form_emp['id_empleado']);
 		}else {
 			$formulario = array(
-				'NombreEmpleado'		=>	$form_emp['NombreEmpleado'],
-				'ApeEmpleado'				=>	$form_emp['ApellidosEmpleado'],
+				'NombreEmpleado'		=>	strtoupper($form_emp['NombreEmpleado']),
+				'ApeEmpleado'				=>	strtoupper($form_emp['ApellidosEmpleado']),
 				'Sexo'							=>	$form_emp['SexoEmpleado'],
 				'DireccionEmpleado'	=>	$form_emp['DireccionEmpleado'],
 				'ColoniaEmpleado'		=>	$form_emp['ColoniaEmpleado'],
@@ -279,8 +289,281 @@ public function infoEmpleadoAction(){
 	return $empleado_info;
 }
 
+public function catpacientesAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$pacientes		= new CatPacientes($this->dbAdapter);
+	$allpacientes	= $pacientes->allpacientes();
+	$clientes			= new CatClientes($this->dbAdapter);
+	$allclientes	= $clientes->clientePaciente();
+	$especies			= new CatEspecies($this->dbAdapter);
+	$allespecies	= $especies->allespecies();
+	$razas				= new CatRazas($this->dbAdapter);
+	$allrazas			= $razas->allrazas();
+
+	return	new ViewModel(array(
+		'Pacientes'	=> 	$allpacientes,
+		'Clientes'	=>	$allclientes,
+		'Especies'	=>	$allespecies,
+		'Razas'			=>	$allrazas,
+		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
+	));
+
+	$this->layout("layout/layout");
+}
+
+public function clientesAction(){
+	$this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$clientes			= new CatClientes($this->dbAdapter);
+	$allclientes	= $clientes->clientePaciente();
+
+	$all_clie 	=	array($allclientes);
+	$clientes		=	new JsonModel($all_clie);
+	return $clientes;
+}
+
+public function razasAction(){
+	$this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+	$id 	= $request->getPost();
+	$razas					= new CatRazas($this->dbAdapter);
+	$especieRazas		= $razas->especiesRazas($id['id']);
+	}
+
+	$razasEsp =	array($especieRazas);
+	$razas		=	new JsonModel($razasEsp);
+	return $razas;
+}
+
+public function sendformpacAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request					= $this->getRequest();
+	if($request->isPost()) {
+		$form_pac 	=	$request->getPost();
+		if ($form_pac['paciente_edit']=='1') {
+			$formulario = array(
+				'idCat_Cliente'		=>	$form_pac['id_cliente'],
+				'NombrePaciente'	=>	$form_pac['NombrePaciente'],
+				'FechaNacPaciente'=>	$form_pac['FecNacPaciente'],
+				'SexoPaciente'		=>	$form_pac['SexoPaciente'],
+				'idCat_Especie'		=>	$form_pac['Especie'],
+				'idCat_Razas'			=>	$form_pac['Raza'],
+				'ColorPaciente'		=>	$form_pac['ColorPaciente'],
+				'EstatusPaciente'	=>	$form_pac['EstatusEmpleado']
+			);
+		$paciente				= new CatPacientes($this->dbAdapter);
+		$paciente_action=	$paciente->updatepaciente($formulario, $form_pac['id_paciente']);
+		}else {
+			$formulario = array(
+				'idCat_Cliente'		=>	$form_pac['id_cliente'],
+				'NombrePaciente'	=>	$form_pac['NombrePaciente'],
+				'FechaNacPaciente'=>	$form_pac['FecNacPaciente'],
+				'SexoPaciente'		=>	$form_pac['SexoPaciente'],
+				'idCat_Especie'		=>	$form_pac['Especie'],
+				'idCat_Razas'			=>	$form_pac['Raza'],
+				'ColorPaciente'		=>	$form_emp['ColorPaciente'],
+				'EstatusPaciente'	=>	$form_pac['EstatusEmpleado']
+			);
+			$paciente 			=	new CatPacientes($this->dbAdapter);
+			$paciente_action=	$paciente->addpaciente($formulario);
+		}
+	}
+	$info_emp 	=	array($empleado_action);
+	$empleado		=	new JsonModel($info_emp);
+	return $empleado;
+}
+
+public function infoPacienteAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$paciente 		=	new CatPacientes($this->dbAdapter);
+		$infopaciente	=	$paciente->infopaciente($id['id']);
+	}
+	$info_paciente	= array($infopaciente);
+	$paciente_info	= new JsonModel($info_paciente);
+	return $paciente_info;
+}
+
+public function catrazasAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$especies			= new CatEspecies($this->dbAdapter);
+	$allespecies	= $especies->allespecies();
+	$razas				= new CatRazas($this->dbAdapter);
+	$allrazas			= $razas->allrazas();
+
+	return	new ViewModel(array(
+		'Especies'	=>	$allespecies,
+		'Razas'			=>	$allrazas,
+		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
+	));
+
+	$this->layout("layout/layout");
+}
 
 
+public function sendformrazaAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
 
+	$request					= $this->getRequest();
+	if($request->isPost()) {
+		$form_raza 	=	$request->getPost();
+		if ($form_raza['raza_edit']=='1') {
+			$formulario = array(
+				'NombreRaza'		=>	$form_raza['NombreRaza'],
+				'idCat_Especie'	=>	$form_raza['Especie'],
+				'EstatusRaza'		=>	$form_raza['EstatusRaza']
+			);
+		$raza				= new CatRazas($this->dbAdapter);
+		$raza_action=	$raza->updateraza($formulario, $form_raza['id_raza']);
+		}else {
+			$formulario = array(
+				'NombreRaza'		=>	$form_raza['NombreRaza'],
+				'idCat_Especie'	=>	$form_raza['Especie'],
+				'EstatusRaza'		=>	$form_raza['EstatusRaza']
+			);
+			$raza 			=	new CatRazas($this->dbAdapter);
+			$raza_action=	$raza->addraza($formulario);
+		}
+	}
+	$info_emp 	=	array($empleado_action);
+	$empleado		=	new JsonModel($info_emp);
+	return $empleado;
+}
+
+public function infoRazasAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$raza 		=	new CatRazas($this->dbAdapter);
+		$inforaza	=	$raza->inforaza($id['id']);
+	}
+	$info_raza	= array($inforaza);
+	$raza_info	= new JsonModel($info_raza);
+	return $raza_info;
+}
+
+public function catserviciosAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$servicios		= new CatServicios($this->dbAdapter);
+	$allservicios	= $servicios->allservicios();
+
+	return	new ViewModel(array(
+		'Servicios'	=>	$allservicios,
+		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
+	));
+
+	$this->layout("layout/layout");
+}
+
+public function sendformservicioAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request					= $this->getRequest();
+	if($request->isPost()) {
+		$form_servicio 	=	$request->getPost();
+		if ($form_servicio['servicio_edit']=='1') {
+			$formulario = array(
+				'NombreServicio'		=>	$form_servicio['NombreServicio'],
+				'TiempoServicio'		=> 	$form_servicio['TiempoServicio'],
+				'UnidadServicio'		=>	$form_servicio['UnidadServicio'],
+				'EstatusServicio'		=>	$form_servicio['EstatusServicio']
+			);
+		$servicios				= new CatServicios($this->dbAdapter);
+		$servicios_action	=	$servicios->updateservicio($formulario, $form_servicio['id_servicio']);
+		}else {
+			$formulario = array(
+				'NombreServicio'		=>	$form_servicio['NombreServicio'],
+				'TiempoServicio'		=> 	$form_servicio['TiempoServicio'],
+				'UnidadServicio'		=>	$form_servicio['UnidadServicio'],
+				'EstatusServicio'		=>	$form_servicio['EstatusServicio']
+			);
+			$servicios 			 =	new CatServicios($this->dbAdapter);
+			$servicios_action=	$servicios->addservicio($formulario);
+		}
+	}
+	$info_ser 	=	array($servicios_action);
+	$servicio		=	new JsonModel($info_ser);
+	return $servicio;
+}
+
+public function infoServiciosAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$servicios 		=	new CatServicios($this->dbAdapter);
+		$infoservicio	=	$servicios->infoservicio($id['id']);
+	}
+	$info_serv	= array($infoservicio);
+	$serv_info	= new JsonModel($info_serv);
+	return $serv_info;
+}
+
+public function catusuariosAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$usuarios			= new CatUsuarios($this->dbAdapter);
+	$allusuarios	= $usuarios->allusuarios();
+
+	return	new ViewModel(array(
+		'InfUsuario'=>	$allusuarios,
+		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
+	));
+
+	$this->layout("layout/layout");
+}
+
+public function empleadosAction(){
+	$this->dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$empleados		=	new CatEmpleados($this->dbAdapter);
+	$allempleados	= $empleados->allempleadosact();
+
+	$all_emp=	array($allempleados);
+	$emp		=	new JsonModel($all_emp);
+	return $emp;
+}
 
 }

@@ -1,4 +1,9 @@
 <?php
+
+/**
+ * Display all errors when APPLICATION_ENV is development.
+ */
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.

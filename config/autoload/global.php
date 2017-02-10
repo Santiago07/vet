@@ -23,17 +23,17 @@ return array(
    ),
    'db' => array (
 
-    'driver'        => 'Mysqli',
-    'username'      => 'root',
-    'password'      => '',
-    'database'      => 'super_block',
-    'host'          => 'localhost',
-
-    // 'driver'        => 'Pdo_Mysql',
-    // 'username'      => 'copati_alfa',
-    // 'password'      => 'RAEveracruz$1',
-    // 'database'      => 'copatimo_copati',
+    // 'driver'        => 'Mysqli',
+    // 'username'      => 'root',
+    // 'password'      => '',
+    // 'database'      => 'super_block',
     // 'host'          => 'localhost',
+
+    'driver'        => 'Pdo_Mysql',
+    'username'      => 'codexsor_alpha',
+    'password'      => 'agenda$1',
+    'database'      => 'codexsor_agenda',
+    'host'          => 'localhost',
 
     'driver_options' => array(
             MYSQLI_INIT_COMMAND=> 'SET NAMES \'UTF8\'',

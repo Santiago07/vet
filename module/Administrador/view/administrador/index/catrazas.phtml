@@ -1,0 +1,109 @@
+<div class="mobile">
+  <div class="container">
+    <div class="row">
+      <div class="box clearfix">
+        <h2 class="text-center">Catálogo de Razas</h2><br>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalForm" onclick="modal('agregar','null')"><span class="glyphicon glyphicon-plus-sign"></span> Agregar </button>
+        </div>
+        <table class="table table-hover" id="bootstrap-table" >
+          <thead>
+            <tr>
+              <th class="text-center">Especie </th>
+              <th class="text-center">Raza</th>
+              <th class="text-center">Estatus</th>
+              <th class="text-center">Ver</th>
+            </tr>
+          </thead>
+          <?php foreach ($this->Razas as  $Razas) { ?>
+          <tbody>
+            <tr>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Razas['NombreEspecie']?></td>
+              <td class="text-center"><?php echo $Razas['NombreRaza']?></td>
+              <td class="text-center"><?php echo ($Razas['EstatusRaza']=='1')?"Activo":"Inactivo" ?></td>
+              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Razas['idCat_Razas'] ?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
+            </tr>
+          </tbody>
+          <?php } ?>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade " id="ModalForm" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="tituloModal"></h4>
+      </div>
+      <div class="modal-body">
+        <form id="FormRazas" name="FormRazas" >
+          <div class="row">
+            <div class="form-group">
+              <div class="form-group col-md-6">
+                <label for="recipient-name" class="control-label">Nombre de Raza :</label>
+                <input type="text" class="form-control" name="NombreRaza" id="NombreRaza" required>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Especie* :</label>
+                <select class="form-control" name="Especie" id="Especie" required>
+                    <option value="">SELECCIONE</option>
+                  <?php foreach($this->Especies as $Especie){ ?>
+                    <option value="<?php echo $Especie['idCat_Especie'] ?>"><?php echo $Especie['NombreEspecie']?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            <div class="form-group col-md-3" style="text-align : center" id="Est_raza">
+              <label for="recipient-name" class="control-label">Activo :</label>
+              <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusRaza" value="1" id="EstatusRaza" checked></center>
+            </div>
+          </div>
+          <input type="text" name="raza_edit"  id="raza_edit" hidden>
+          <input type="text" name="id_raza" id="id_raza" hidden>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-send" onclick="">Agregar</button>
+        <button type="submit" class="btn btn-primary" id="btn-edit" >Editar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- END MODAL-->
+
+<script src="<?php echo $this->basePath()?>/js/Catalogos/CatRazas.js"></script>
+
+<style media="screen">
+.mobile {
+  margin-top: 3%;
+}
+
+@media screen and  (max-width : 768px){
+  .mobile{
+    margin-top: 25%;
+  }
+
+@media screen and (max-width : 768px) and (orientation : landscape){
+    .mobile{
+      margin-top: 12%;
+    }
+}
+
+
+@media screen  and  (min-device-width : 768px) and (max-device-width : 1024px){
+    .mobile{
+      margin-top: 7%;
+    }
+
+}
+@media screen and (min-device-width: 1024px) and (orientation : landscape){
+    .mobile{
+      margin-top: 3%;
+    }
+}
+
+</style>

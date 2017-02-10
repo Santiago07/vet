@@ -1,0 +1,113 @@
+<div class="mobile">
+  <div class="container">
+    <div class="row">
+      <div class="box clearfix">
+        <h2 class="text-center">Catálogo de servicios</h2><br>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalForm" onclick="modal('agregar','null')"><span class="glyphicon glyphicon-plus-sign"></span> Agregar </button>
+        </div>
+        <table class="table table-hover" id="bootstrap-table" >
+          <thead>
+            <tr>
+              <th class="text-center">Servicio</th>
+              <th class="text-center">Tiempo</th>
+              <th class="text-center">Estatus</th>
+              <th class="text-center">Ver</th>
+            </tr>
+          </thead>
+          <?php foreach ($this->Servicios as  $Servicio) { ?>
+          <tbody>
+            <tr>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Servicio['NombreServicio']?></td>
+              <td class="text-center"><?php echo $Servicio['TiempoServicio']." ".$Servicio['UnidadServicio']?></td>
+              <td class="text-center"><?php echo ($Servicio['EstatusServicio']=='1')?"Activo":"Inactivo" ?></td>
+              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Servicio['idCat_Servicio'] ?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
+            </tr>
+          </tbody>
+          <?php } ?>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade " id="ModalForm" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="tituloModal"></h4>
+      </div>
+      <div class="modal-body">
+        <form id="FormServicios">
+          <div class="row">
+            <div class="form-group">
+              <div class="form-group col-md-5">
+                <label for="recipient-name" class="control-label">Nombre de servicio* :</label>
+                <input type="text" class="form-control" name="NombreServicio" id="NombreServicio" required>
+              </div>
+                <div class="form-group col-md-2">
+                  <label for="recipient-name" class="control-label">Duración* :</label>
+                  <input type="number" class="form-control" name="TiempoServicio" id="TiempoServicio" min="0" max="999" required>
+                </div>
+              <div class="form-group col-md-2">
+                <label for="recipient-name" class="control-label">Unidad* :</label>
+                <select class="form-control" name="UnidadServicio" id="UnidadServicio" required>
+                    <option value="">SELECCIONE</option>
+                    <option value="MINUTOS">MINUTOS</option>
+                    <option value="HORAS">HORAS</option>
+                    <option value="DIAS">DIAS</option>
+                </select>
+              </div>
+            <div class="form-group col-md-3" style="text-align : center" id="Est_servicio">
+              <label for="recipient-name" class="control-label">Activo :</label>
+              <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusServicio" value="1" id="EstatusServicio" checked></center>
+            </div>
+          </div>
+          <input type="text" name="servicio_edit"  id="servicio_edit" hidden>
+          <input type="text" name="id_servicio" id="id_servicio" hidden>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-send" onclick="">Agregar</button>
+        <button type="submit" class="btn btn-primary" id="btn-edit" >Editar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- END MODAL-->
+
+<script src="<?php echo $this->basePath()?>/js/Catalogos/CatServicios.js"></script>
+
+<style media="screen">
+.mobile {
+  margin-top: 3%;
+}
+
+@media screen and  (max-width : 768px){
+  .mobile{
+    margin-top: 25%;
+  }
+
+@media screen and (max-width : 768px) and (orientation : landscape){
+    .mobile{
+      margin-top: 12%;
+    }
+}
+
+
+@media screen  and  (min-device-width : 768px) and (max-device-width : 1024px){
+    .mobile{
+      margin-top: 7%;
+    }
+
+}
+@media screen and (min-device-width: 1024px) and (orientation : landscape){
+    .mobile{
+      margin-top: 3%;
+    }
+}
+
+</style>

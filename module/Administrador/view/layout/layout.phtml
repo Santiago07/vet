@@ -12,7 +12,7 @@
     ?>
 
     <!-- Le styles -->
-    <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/vet.ico'])
+    <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/vet.png'])
           ->prependStylesheet($this->basePath('layout_admin/css/bootstrap.min.css'))
           ->prependStylesheet($this->basePath('layout_admin/css/sb-admin.css'))
           ->prependStylesheet($this->basePath('layout_admin/css/plugins/morris.css'))
@@ -59,7 +59,7 @@
                             <a href="#">
                                 <div class="media">
                                     <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                        <img class="media-object" src="" alt="">
                                     </span>
                                     <div class="media-body">
                                         <h5 class="media-heading"><strong>John Smith</strong>
@@ -74,7 +74,7 @@
                             <a href="#">
                                 <div class="media">
                                     <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                        <img class="media-object" src="" alt="">
                                     </span>
                                     <div class="media-body">
                                         <h5 class="media-heading"><strong>John Smith</strong>
@@ -89,7 +89,7 @@
                             <a href="#">
                                 <div class="media">
                                     <span class="pull-left">
-                                        <img class="media-object" src="http://placehold.it/50x50" alt="">
+                                        <img class="media-object" src="" alt="">
                                     </span>
                                     <div class="media-body">
                                         <h5 class="media-heading"><strong>John Smith</strong>
@@ -148,7 +148,7 @@
                                 <a href="<?php echo $this->basePath()?>/administrador/index/catempleados">Empleados</a>
                             </li>
                             <li>
-                                <a href="#">Paciente</a>
+                                <a href="<?php echo $this->basePath()?>/administrador/index/catpacientes">Paciente</a>
                             </li>
                             <li>
                                 <a href="#">Horarios</a>
@@ -157,10 +157,13 @@
                                 <a href="#">Excepciones</a>
                             </li>
                             <li>
-                                <a href="#">Razas</a>
+                                <a href="<?php echo $this->basePath()?>/administrador/index/catrazas ">Razas</a>
                             </li>
                             <li>
-                                <a href="#">Servicios</a>
+                                <a href="<?php echo $this->basePath()?>/administrador/index/catservicios">Servicios</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->basePath()?>/administrador/index/catusuarios">Usuarios</a>
                             </li>
 
                         </ul>

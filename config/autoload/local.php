@@ -31,5 +31,16 @@ return array(
         'driver_options'=>array(
             PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES \'UTF8\''
         ),
+
+        // 'driver'        => 'Pdo_Mysql',
+        // 'username'      => 'codexsor_alpha',
+        // 'password'      => 'agenda$1',
+        // 'database'      => 'codexsor_agenda',
+        // 'host'          => 'localhost',
+        //
+        // 'driver_options' => array(
+        //         MYSQLI_INIT_COMMAND=> 'SET NAMES \'UTF8\'',
+        //
+        //     ),
     ),
 );

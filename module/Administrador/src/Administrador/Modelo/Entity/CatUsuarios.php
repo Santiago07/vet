@@ -8,16 +8,16 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Where;
 
-class CatEmpleados extends TableGateway{
+class CatUsuarios extends TableGateway{
 
 	public function __construct(Adapter $adapter=null, $databaseSchema = null,
 	 ResultSet $selectResultPrototype=null){
-			return parent::__construct('Cat_Empleado', $adapter, $databaseSchema, $selectResultPrototype);
+			return parent::__construct('Cat_Usuarios', $adapter, $databaseSchema, $selectResultPrototype);
 	}
 
-	public function allempleados(){
+	public function allusuarios(){
 		$resultSet =	$this->select(function($select){
-			$select->Join("Cat_Sucursales","Cat_Empleado.idCat_Sucursales = Cat_Sucursales.idCat_Sucursales",array("NombreSucursal"=>"NombreSucursal"));
+			$select->Join("Cat_Empleado", "Cat_Usuarios.idCat_Empleado = Cat_Empleado.idCat_Empleado", array("NombreEmpleado" => "NombreEmpleado", "ApeEmpleado" => "ApeEmpleado"));
 		});
 		return $resultSet->toArray();
 	}
@@ -45,11 +45,6 @@ class CatEmpleados extends TableGateway{
 		return $selectString;
 	}
 
-	public function allempleadosact(){
-		$resultSet = $this->select(function($select){
-			$select->Where("EstatusEmpleado = '1'");
-		});
-		return $resultSet->toArray();
-	}
+
 
 }

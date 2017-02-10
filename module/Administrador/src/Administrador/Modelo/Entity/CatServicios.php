@@ -8,48 +8,40 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Where;
 
-class CatEmpleados extends TableGateway{
+class CatServicios extends TableGateway{
 
 	public function __construct(Adapter $adapter=null, $databaseSchema = null,
 	 ResultSet $selectResultPrototype=null){
-			return parent::__construct('Cat_Empleado', $adapter, $databaseSchema, $selectResultPrototype);
+			return parent::__construct('Cat_Servicio', $adapter, $databaseSchema, $selectResultPrototype);
 	}
 
-	public function allempleados(){
+
+	public function allservicios(){
 		$resultSet =	$this->select(function($select){
-			$select->Join("Cat_Sucursales","Cat_Empleado.idCat_Sucursales = Cat_Sucursales.idCat_Sucursales",array("NombreSucursal"=>"NombreSucursal"));
 		});
 		return $resultSet->toArray();
 	}
 
-	public function addempleado($cliente = array()){
-		$this->insert($cliente);
+	public function addservicio($servicio = array()){
+		$this->insert($servicio);
 		$sql 	= $this->getSql();
-		$insertar = $sql->insert()->values($cliente);
+		$insertar = $sql->insert()->values($servicio);
 		$selectString = $sql->getSqlStringForSqlObject($insertar);
 		return $selectString;
 	}
 
-	public function infoempleado($id){
+	public function infoservicio($id){
 		$resultSet = $this->select(function($select) use ($id){
-			$select->where('idCat_Empleado = '.$id);
+			$select->Where("idCat_Servicio = ".$id);
 		});
 		return $resultSet->toArray();
 	}
 
-	public function updateempleado($update = array(),$id){
-		$this->update($update, array('idCat_Empleado' => $id));
+	public function updateservicio($update = array(),$id){
+		$this->update($update, array('idCat_Servicio' => $id));
 		$sql					=	$this->getSql();
 		$update_data	=	$sql->update()->set($update);
 		$selectString = $sql->getSqlStringForSqlObject($update_data);
 		return $selectString;
 	}
-
-	public function allempleadosact(){
-		$resultSet = $this->select(function($select){
-			$select->Where("EstatusEmpleado = '1'");
-		});
-		return $resultSet->toArray();
-	}
-
 }

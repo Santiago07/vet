@@ -135,6 +135,9 @@ function respuestas(data,respuesta) {
         timer: 2000,
         imageUrl: "/sweetalert/img/ok.png",
         showConfirmButton: false });
+      setTimeout(function () {
+            location.reload()
+        }, 2500);
 
       break;
     case '3':

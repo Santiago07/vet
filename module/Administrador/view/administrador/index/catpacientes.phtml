@@ -1,0 +1,156 @@
+<div class="mobile">
+  <div class="container">
+    <div class="row">
+      <div class="box clearfix">
+        <h2 class="text-center">Catálogo de Pacientes</h2><br>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalForm" onclick="modal('agregar','null')"><span class="glyphicon glyphicon-plus-sign"></span> Agregar </button>
+        </div>
+        <table class="table table-hover" id="bootstrap-table" >
+          <thead>
+            <tr>
+              <th class="text-center">Nombre </th>
+              <th class="text-center">Dueño</th>
+              <th class="text-center">Especie</th>
+              <th class="text-center">Raza</th>
+              <th class="text-center">Ver</th>
+            </tr>
+          </thead>
+          <?php foreach ($this->Pacientes as  $Paciente) { ?>
+          <tbody>
+            <tr>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Paciente['NombrePaciente']?></td>
+              <td class="text-center"><?php echo $Paciente['Nombre']." ".$Paciente['Apellidos'] ?></td>
+              <td class="text-center"><?php echo $Paciente['Especie'] ?></td>
+              <td class="text-center" style="text-transform : capitalize"><?php echo $Paciente['Raza'] ?></td>
+              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Paciente['idCat_Paciente'] ?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
+            </tr>
+          </tbody>
+          <?php } ?>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade " id="ModalForm" tabindex="-1" role="dialog" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="tituloModal"></h4>
+      </div>
+      <div class="modal-body">
+        <form id="FormPaciente" name="FormPaciente" enctype="multipart/form-data" method="post" accept-charset="utf-8" >
+          <div class="row">
+            <div class="form-element" id ="img" hidden>
+              <div class="form-element col-md-6 col-md-offset-3">
+                <label for="img-file" class="form-label">Foto</label>
+                <input type="file" name="imagen" id="imagen">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group col-md-8 col-md-offset-2">
+                <label for="recipient-name" class="control-label">Nombre de cliente* :</label>
+                <input type="text" class="form-control " name="cliente" list="cliente" placeholder=""  required id="Cli">
+                <datalist id="cliente">
+                </datalist>
+                <input type="text" name="id_cliente" value="" id="id_cliente" hidden>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group col-md-6">
+                <label for="recipient-name" class="control-label">Nombre de la mascota* :</label>
+                <input type="text" class="form-control" name="NombrePaciente" id="NombrePaciente" required>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Fecha nacimiento* :</label>
+                <input type="date" class="form-control" name="FecNacPaciente" id="FecNacPaciente" required>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="recipient-name" class="control-label">Sexo*:</label>
+                <select class="form-control" name="SexoPaciente" id="SexoPaciente" required>
+                  <option value="1">Macho</option>
+                  <option value="0">Hembra</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Especie* :</label>
+                <select class="form-control" name="Especie" id="Especie" required>
+                    <option value="">SELECCIONE</option>
+                  <?php foreach($this->Especies as $Especie){ ?>
+                    <option value="<?php echo $Especie['idCat_Especie'] ?>"><?php echo $Especie['NombreEspecie']?></option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Raza* :</label>
+                <select class="form-control" name="Raza" id="Raza" required disabled>
+                <?php foreach($this->Razas as $Razas){ ?>
+                  <option value="<?php echo $Razas['idCat_Razas'] ?>"><?php echo $Razas['NombreRaza']?></option>
+                <?php } ?>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-group col-md-3">
+                <label for="recipient-name" class="control-label">Color :</label>
+                <input type="text" class="form-control" name="ColorPaciente" id="ColorPaciente">
+              </div>
+            </div>
+            <div class="form-group col-md-3" style="text-align : center" id="Est_pac">
+              <label for="recipient-name" class="control-label">Activo :</label>
+              <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusEmpleado" value="1" id="EstatusPaciente" checked></center>
+            </div>
+          </div>
+          <input type="text" name="paciente_edit"  id="paciente_edit" hidden>
+          <input type="text" name="id_paciente" id="id_paciente" hidden>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="btn-send" onclick="">Agregar</button>
+        <button type="submit" class="btn btn-primary" id="btn-edit" >Editar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- END MODAL-->
+
+<script src="<?php echo $this->basePath()?>/js/Catalogos/CatPacientes.js"></script>
+
+<style media="screen">
+.mobile {
+  margin-top: 3%;
+}
+
+@media screen and  (max-width : 768px){
+  .mobile{
+    margin-top: 25%;
+  }
+
+@media screen and (max-width : 768px) and (orientation : landscape){
+    .mobile{
+      margin-top: 12%;
+    }
+}
+
+
+@media screen  and  (min-device-width : 768px) and (max-device-width : 1024px){
+    .mobile{
+      margin-top: 7%;
+    }
+
+}
+@media screen and (min-device-width: 1024px) and (orientation : landscape){
+    .mobile{
+      margin-top: 3%;
+    }
+}
+
+</style>
