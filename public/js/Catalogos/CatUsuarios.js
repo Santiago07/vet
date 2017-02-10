@@ -10,81 +10,61 @@ $(document).ready( function () {
 //Modal
 function modal(tipo,id){
   var type      = tipo;
-  var idpaciente = id;
-  var titulo    = (type == 'agregar')?'Agregar nuevo paciente':'Editar';
+  var idusuario = id;
+  var titulo    = (type == 'agregar')?'Agregar usuario':'Editar';
   $('#tituloModal').html(titulo);
   $('#btn-edit').hide();
-  $('#Est_pac').hide();
+  $('#Est_usr').hide();
   empleados();
   if (type == 'editar') {
-    $('#NombrePaciente').prop('disabled',true);
-    $('#Cli').prop('disabled',true);
-    $('#SexoPaciente').prop('disabled',true);
-    $('#FecNacPaciente').prop('disabled',true);
-    $('#imagen').prop('disabled',true);
-    $('#Especie').prop('disabled',true);
-    $('#Raza').prop('disabled',true);
-    $('#ColorPaciente').prop('disabled',true);
-    $('#EstatusPaciente').prop('disabled',true);
-    $('#Est_pac').show();
-
-    editarPaciente(idpaciente);
+    $('#NombreUsuario').prop('disabled',true);
+    $('#Emp').prop('disabled',true);
+    $('#PassUsuario').prop('disabled',true);
+    $('#EstatusUsuario').prop('disabled',true);
+    $('#Est_usr').show();
+    editarUsuario(idusuario);
   }
 }
 
 
 
 //Envio de Formulario
-$('#FormPaciente').submit(function(e) {
+$('#FormUsuario').submit(function(e) {
   e.preventDefault();
-  var cliente  = $('#Cli').val();
-  var selec_cli= $('#cliente option[value="'+cliente+'"]').html();
-  $('#id_cliente').val(selec_cli);
-  var info      = $('#FormPaciente').serialize();
-  var ruta      = "../../administrador/index/sendformpac";
+  var empleado  = $('#Emp').val();
+  var selec_emp= $('#empleado option[value="'+empleado+'"]').html();
+  $('#id_empleado').val(selec_emp);
+  var info      = $('#FormUsuario').serialize();
+  var ruta      = "../../administrador/index/sendformusr";
   var respuesta = '2';
   EnvioInfo(ruta,info,respuesta);
 });
 
 
 //Recibir datos de paciente
-function editarPaciente(idPaciente){
-  var info      = jQuery.parseJSON('{"id" :"'+idPaciente+'"}');
-  var ruta      = "../../administrador/index/infoPaciente";
+function editarUsuario(idusuario){
+  var info      = jQuery.parseJSON('{"id" :"'+idusuario+'"}');
+  var ruta      = "../../administrador/index/infoUsuario";
   var respuesta = '3';
   EnvioInfo(ruta,info,respuesta);
 }
 
-//Cargar clientes
+//Cargar empelados
 function empleados(){
   var info      = "";
   var ruta      = "../../administrador/index/empleados";
-  var respuesta = '4';
+  var respuesta = '1';
   EnvioInfo(ruta,info,respuesta);
 }
 
-//Cargar razas
-$('#Especie').change(function(){
-  var idraza = $('#Especie').val();
-  var info      = jQuery.parseJSON('{ "id" : "'+idraza+'"}');
-  var ruta      = "../../administrador/index/razas";
-  var respuesta = '1';
-  EnvioInfo(ruta,info,respuesta);
-  $('#Raza').prop('disabled',false);
-});
 
 //Editar
 function editar(){
-  $('#NombrePaciente').prop('disabled',false);
-  $('#Cli').prop('disabled',false);
-  $('#SexoPaciente').prop('disabled',false);
-  $('#FecNacPaciente').prop('disabled',false);
-  $('#imagen').prop('disabled',false);
-  $('#Especie').prop('disabled',false);
-  $('#Raza').prop('disabled',false);
-  $('#ColorPaciente').prop('disabled',false);
-  $('#EstatusPaciente').prop('disabled',false);
-  $('#paciente_edit').val('1');
+  $('#NombreUsuario').prop('disabled',false);
+  $('#Emp').prop('disabled',false);
+  $('#PassUsuario').prop('disabled',false);
+  $('#EstatusUsuario').prop('disabled',false);
+  $('#usuario_edit').val('1');
   $('#btn-edit').hide();
   $('#btn-send').show().html('Guardar');
 }
@@ -102,30 +82,17 @@ function EnvioInfo(ruta, info, respuesta) {
   });
 }
 
-//Envío de datos ajax img
-function Envio(ruta, info, respuesta) {
-  $.ajax({
-    url     : ruta,
-    type    : "POST",
-    data    : info,
-    dataType: 'json',
-    contentType: 'multipart/form-data',
-    success : function(data) {
-      respuestas(data,respuesta);
-    }
-  });
-}
 
 //Recibir las respuestas
 function respuestas(data,respuesta) {
   switch (respuesta) {
     case '1':
-      var raza  = '<option value="">SELECCIONE</option>'
-      for (var i = 0; i < data[0].length; i++){
-        raza+='<option value="'+data[0][i].idCat_Razas+'">'+data[0][i].NombreRaza+'</option>';
+      var empleado = '<option value=""></option>'
+      for (var i = 0; i < data[0].length; i++) {
+        empleado+='<option  value="'+data[0][i].NombreEmpleado+" "+data[0][i].ApeEmpleado+'">'+data[0][i].idCat_Empleado+'</option>';
       };
-      $('#Raza').html(raza);
-        break;
+      $("#empleado").html(empleado);
+    break;
     case '2':
       swal({
         title: "Se realizó correctamente",
@@ -138,34 +105,22 @@ function respuestas(data,respuesta) {
 
       break;
     case '3':
-        $('#NombrePaciente').val(data[0][0]['NombrePaciente']);
-        $('#Cli').val(data[0][0]['NombreCliente']+" "+data[0][0]['ApeCliente']);
-        $('#SexoPaciente').val(data[0][0]['SexoPaciente']);
-        $('#FecNacPaciente').val(data[0][0]['FechaNacPaciente']);
-        $('#Especie').val(data[0][0]['idCat_Especie']);
-        $('#Raza').val(data[0][0]['idCat_Razas']);
-        $('#ColorPaciente').val(data[0][0]['ColorPaciente']);
-        var estatus = (data[0][0]['EstatusPaciente']==1)?1:0;
+        $('#Emp').val(data[0][0]['NombreEmpleado']+" "+data[0][0]['ApeEmpleado']);
+        $('#NombreUsuario').val(data[0][0]['NombreUsuario']);
+        $('#PassUsuario').val(data[0][0]['PassUsuario']);
+        var estatus = (data[0][0]['EstatusUsuario']==1)?1:0;
         if (estatus == '1') {
-        $('#EstatusPaciente').prop('checked',true);
+        $('#EstatusUsuario').prop('checked',true);
         }else{
-        $('#EstatusPaciente').prop('checked',false);
+        $('#EstatusUsuario').prop('checked',false);
         }
-        $('#id_paciente').val(data[0][0]['idCat_Paciente']);
+        $('#id_usuario').val(data[0][0]['idCat_Usuarios']);
         $('#btn-send').hide();
         $('#btn-edit').show();
         $('#btn-edit').removeAttr('type','submit').attr('onclick','editar()').attr('type','button');
       break;
 
-    case '4':
-    console.log(data[0][0]);
-    var empleado = '<option value=""></option>'
-    for (var i = 0; i < data[0].length; i++) {
-      empleado+='<option  value="'+data[0][i].NombreEmpleado+" "+data[0][i].ApeEmpleado+'">'+data[0][i].idCat_Empleado+'</option>';
-    };
-    $("#empleado").html(empleado);
 
-      break;
     default:
   }
 }

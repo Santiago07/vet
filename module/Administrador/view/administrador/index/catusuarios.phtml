@@ -23,7 +23,7 @@
               <td class="text-center"><?php echo $Usr['NombreUsuario']?></td>
               <td class="text-center"><?php echo ($Usr['EstatusUsuario']=='1')?"Activo":"Inactivo" ?></td>
               <td class="text-center" style="text-transform : capitalize">Permisos</td>
-              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Usr['idCat_Cliente']?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
+              <td class="text-center"><a data-toggle="modal" data-target="#ModalForm" onclick="modal('editar','<?php echo $Usr['idCat_Usuarios']?>')"><p class="text-center"><span class="glyphicon glyphicon-eye-open"></span></p></a></td>
             </tr>
           </tbody>
           <?php } ?>
@@ -54,22 +54,24 @@
               </div>
             </div>
             <div class="form-group">
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-5">
                 <label for="recipient-name" class="control-label">Usuario* :</label>
                 <input type="text" class="form-control" name="NombreUsuario" id="NombreUsuario" required>
               </div>
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-5">
                 <label for="recipient-name" class="control-label">Contraeña* :</label>
-                <input type="pass" class="form-control" name="PassUsuario" id="PassUsuario" required>
+                <input type="password" class="form-control" name="PassUsuario" id="PassUsuario" required>
               </div>
-              <div class="form-group col-md-3" style="text-align : center" id="Est_pac">
+              <div class="form-group col-md-2" style="text-align : center" id="Est_usr">
                 <label for="recipient-name" class="control-label">Activo :</label>
-                <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusEmpleado" value="1" id="EstatusPaciente" checked></center>
+                <center><input type="checkbox" class="form-control" style="width:23px" name="EstatusUsuario" value="1" id="EstatusUsuario" checked></center>
               </div>
+              <input type="hidden" name="FechaAltaUsuario" value="<?php echo date("Y-m-d H:i:s");?>">
+
             </div>
           </div>
-          <input type="text" name="paciente_edit"  id="paciente_edit" hidden>
-          <input type="text" name="id_paciente" id="id_paciente" hidden>
+          <input type="text" name="usuario_edit"  id="usuario_edit" hidden>
+          <input type="text" name="id_usuario" id="id_usuario" hidden>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

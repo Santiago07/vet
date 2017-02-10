@@ -22,23 +22,24 @@ class CatUsuarios extends TableGateway{
 		return $resultSet->toArray();
 	}
 
-	public function addempleado($cliente = array()){
-		$this->insert($cliente);
+	public function addusuario($usuario = array()){
+		$this->insert($usuario);
 		$sql 	= $this->getSql();
-		$insertar = $sql->insert()->values($cliente);
+		$insertar = $sql->insert()->values($usuario);
 		$selectString = $sql->getSqlStringForSqlObject($insertar);
 		return $selectString;
 	}
 
-	public function infoempleado($id){
+	public function infousuario($id){
 		$resultSet = $this->select(function($select) use ($id){
-			$select->where('idCat_Empleado = '.$id);
+			$select->Join("Cat_Empleado","Cat_Usuarios.idCat_Empleado = Cat_Empleado.idCat_Empleado", array("NombreEmpleado"=>"NombreEmpleado", "ApeEmpleado"=>"ApeEmpleado"));
+			$select->where('idCat_Usuarios = '.$id);
 		});
 		return $resultSet->toArray();
 	}
 
-	public function updateempleado($update = array(),$id){
-		$this->update($update, array('idCat_Empleado' => $id));
+	public function updateusuario($update = array(),$id){
+		$this->update($update, array('idCat_Usuarios' => $id));
 		$sql					=	$this->getSql();
 		$update_data	=	$sql->update()->set($update);
 		$selectString = $sql->getSqlStringForSqlObject($update_data);

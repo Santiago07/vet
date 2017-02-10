@@ -566,4 +566,58 @@ public function empleadosAction(){
 	return $emp;
 }
 
+public function sendformusrAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request					= $this->getRequest();
+	if($request->isPost()) {
+		$form_usuario 	=	$request->getPost();
+		if ($form_usuario['usuario_edit']=='1') {
+			$formulario = array(
+				'NombreUsuario'		=>	$form_usuario['NombreUsuario'],
+				'PassUsuario'			=>	md5($form_usuario['PassUsuario']),
+				'FechaAltaUsuario'=>	$form_usuario['FechaAltaUsuario'],
+				'EstatusUsuario'	=>	$form_usuario['EstatusUsuario'],
+				'TipoUsuario'			=>	'1',
+				'idCat_Empleado'	=>	$form_usuario['id_empleado'],
+			);
+		$usuarios				= new CatUsuarios($this->dbAdapter);
+		$usuarios_action=	$usuarios->updateusuario($formulario, $form_usuario['id_usuario']);
+		}else {
+			$formulario = array(
+				'NombreUsuario'		=>	$form_usuario['NombreUsuario'],
+				'PassUsuario'			=>	md5($form_usuario['PassUsuario']),
+				'FechaAltaUsuario'=>	$form_usuario['FechaAltaUsuario'],
+				'EstatusUsuario'	=>	$form_usuario['EstatusUsuario'],
+				'TipoUsuario'			=>	'1',
+				'idCat_Empleado'	=>	$form_usuario['id_empleado'],
+				'idCat_Cliente'		=>	'2'
+			);
+			$usuarios 			 =	new CatUsuarios($this->dbAdapter);
+			$usuarios_action =	$usuarios->addusuario($formulario);
+		}
+	}
+	$info_ser 	=	array($servicios_action);
+	$servicio		=	new JsonModel($info_ser);
+	return $servicio;
+}
+
+public function infoUsuarioAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$usuarios 		=	new CatUsuarios($this->dbAdapter);
+		$infousuario	=	$usuarios->infousuario($id['id']);
+	}
+	$info_usr	= array($infousuario);
+	$usr_info	= new JsonModel($info_usr);
+	return $usr_info;
+}
+
 }
