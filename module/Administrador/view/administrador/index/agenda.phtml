@@ -1,0 +1,43 @@
+<link href='<?php echo $this->basePath()?>/agenda/lib/cupertino/jquery-ui.min.css' />
+<link href='<?php echo $this->basePath()?>/agenda/fullcalendar.min.css' rel='stylesheet' />
+<link href='<?php echo $this->basePath()?>/agenda/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+<script src='<?php echo $this->basePath()?>/agenda/lib/moment.min.js'></script>
+<script src='<?php echo $this->basePath()?>/agenda/lib/jquery.min.js'></script>
+<script src='<?php echo $this->basePath()?>/agenda/fullcalendar.min.js'></script>
+<script src='<?php echo $this->basePath()?>/agenda/locale-all.js'></script>
+<script src="<?php echo $this->basePath()?>/js/Agenda/Agenda.js"></script>
+<div class="mobile" >
+  <div class="col-md-12 ">
+    <div class="panel panel-default" >
+      <div class="panel-heading"> <h1 class="panel-title text-center"> Agenda </h1>
+      </div>
+      	<div id='calendar'></div>
+    </div>
+  </div>
+</div>
+
+<style media="screen">
+.mobile {
+  margin-top: 3%;
+}
+@media screen and  (max-width : 768px){
+  .mobile{
+    margin-top: 25%;
+  }
+@media screen and (max-width : 768px) and (orientation : landscape){
+    .mobile{
+      margin-top: 12%;
+    }
+}
+@media screen  and  (min-device-width : 768px) and (max-device-width : 1024px){
+    .mobile{
+      margin-top: 7%;
+    }
+
+}
+@media screen and (min-device-width: 1024px) and (orientation : landscape){
+    .mobile{
+      margin-top: 3%;
+    }
+}
+</style>

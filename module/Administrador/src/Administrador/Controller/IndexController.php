@@ -620,4 +620,23 @@ public function infoUsuarioAction(){
 	return $usr_info;
 }
 
+public function agendaAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$usuarios			= new CatUsuarios($this->dbAdapter);
+	$allusuarios	= $usuarios->allusuarios();
+
+	return	new ViewModel(array(
+		'InfUsuario'=>	$allusuarios,
+		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
+	));
+
+	$this->layout("layout/layout");
+}
+
+
+
 }
