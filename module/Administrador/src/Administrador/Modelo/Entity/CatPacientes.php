@@ -48,5 +48,11 @@ class CatPacientes extends TableGateway{
 		return $selectString;
 	}
 
+	public function paciente($id){
+		$resultSet = $this->select(function($select) use ($id){
+			$select->where('idCat_Cliente = '.$id);
+		});
+		return $resultSet->toArray();
+	}
 
 }

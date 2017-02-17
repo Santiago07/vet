@@ -52,4 +52,13 @@ class CatEmpleados extends TableGateway{
 		return $resultSet->toArray();
 	}
 
+	public function empleadoscita(){
+		$resultSet = $this->select(function($select){
+			$select->columns(array("NombreEmpleado"=>"NombreEmpleado", "ApeEmpleado"=> "ApeEmpleado", "idCat_Empleado" => "idCat_Empleado"));
+			$select->Join("Cat_Usuarios", "Cat_Empleado.idCat_Empleado = Cat_Usuarios.idCat_Empleado",array("idCat_Usuarios"=>"idCat_Usuarios"));
+			$select->Where("EstatusEmpleado = '1' AND CategoriaEmpleado = '1'");
+		});
+		return $resultSet->toArray();
+	}
+
 }

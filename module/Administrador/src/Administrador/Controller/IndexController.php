@@ -25,6 +25,9 @@ use Administrador\Modelo\Entity\CatEspecies;
 use Administrador\Modelo\Entity\CatRazas;
 use Administrador\Modelo\Entity\CatServicios;
 use Administrador\Modelo\Entity\CatUsuarios;
+use Administrador\Modelo\Entity\CatEspacio;
+use Administrador\Modelo\Entity\TabAgenda;
+use Administrador\Modelo\Entity\Agenda;
 
 // Correo
 use Zend\Mail;
@@ -629,14 +632,138 @@ public function agendaAction(){
 	$usuarios			= new CatUsuarios($this->dbAdapter);
 	$allusuarios	= $usuarios->allusuarios();
 
+	$agenda 				= new TabAgenda($this->dbAdapter);
+	$allcitas				=	$agenda->allcitas();
+
+
 	return	new ViewModel(array(
 		'InfUsuario'=>	$allusuarios,
+		'Citas'			=>	$allcitas,
 		'Usuario'		=>	$identi->NombreUsuario //Envio del nombre de usuario al layout
 	));
 
 	$this->layout("layout/layout");
 }
 
+public function nuevacitaAction(){
+	$this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$request = $this->getRequest();
+	$auth = $this->auth;
+	@$identi=$auth->getStorage()->read();
+
+	$usuarios			= new CatUsuarios($this->dbAdapter);
+	$allusuarios	= $usuarios->allusuarios();
+	$sucursal			= new CatSucursales($this->dbAdapter);
+	$allsucursales=	$sucursal->allsucursales();
+	$servicios		= new CatServicios($this->dbAdapter);
+	$allservicios	= $servicios->allservicios();
+	$empleados 		= new CatEmpleados($this->dbAdapter);
+	$allempleados	= $empleados->empleadoscita();
+
+	return	new ViewModel(array(
+		'InfUsuario'	=>	$allusuarios,
+		'Sucuarsales'	=>	$allsucursales,
+		'Servicios'		=>	$allservicios,
+		'Empleados'		=>	$allempleados,
+		'Usuario'			=>	$identi->NombreUsuario, //Envio del nombre de usuario al layout
+		'Usr'					=>	$identi->idCat_Usuarios
+	));
+
+	$this->layout("layout/layout");
+}
+
+public function pacienteAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$paciente 		=	new CatPacientes($this->dbAdapter);
+		$infopaciente	=	$paciente->paciente($id['id']);
+	}
+	$info_paciente	= array($infopaciente);
+	$paciente_info	= new JsonModel($info_paciente);
+	return $paciente_info;
+}
+
+public function espacioAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request 		= $this->getRequest();
+	if ($request->isPost()) {
+		$id 	= $request->getPost();
+		$espacio 		=	new CatEspacio($this->dbAdapter);
+		$espaciosuc	=	$espacio->espaciosuc($id['id']);
+	}
+	$info_espacio	= array($espaciosuc);
+	$espacio_info	= new JsonModel($info_espacio);
+	return $espacio_info;
+}
+
+public function sendformcitaAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$request					= $this->getRequest();
+	if($request->isPost()) {
+		$form_cita 	=	$request->getPost();
+
+		//REALIZAR VALIDACIONES
+		$formulario = array(
+			'idCat_Cliente'		=>	$form_cita['id_cliente'],
+			'idCat_Paciente'	=>	$form_cita['idCat_Paciente'],
+			'idCat_Servicio'	=>	$form_cita['idCat_Servicio'],
+			'idCat_Espacio'		=>	$form_cita['idCat_Espacio'],
+			'idCat_Sucursales'=>	$form_cita['idCat_Sucursales'],
+			'idCat_UsuariosDestino'=> $form_cita['idCat_UsuariosDestino'],
+			'idCat_UsuariosCrea'=>$form_cita['id_usuariocrea'],
+			'HorarioInicio'		=>	$form_cita['hora'],
+			'HorarioFin'			=>	"18:45",
+			'FechaAgenda'			=>	$form_cita['fecha'],
+			'MotivoCita'			=>	$form_cita['motivo'],
+			'EstatusAgenda'			=>	'1'
+		);
+	$agenda 				= new TabAgenda($this->dbAdapter);
+	$agenda_action	=	$agenda->addAgenda($formulario);
+	$idAgenda				= $agenda->lastInsertValue;
+	$infoagenda			= new TabAgenda($this->dbAdapter);
+	$infocita				= $infoagenda->infocita($idAgenda);
+
+	$addAgenda = array(
+		'title'		=> "Servicio : ".$infocita[0]['NombreServicio']." Al pacinete : ".$infocita[0]['NombrePaciente']." Del dueño : ".$infocita[0]['NombreCliente']." ".$infocita[0]['ApeCliente'],
+		'start'		=> $infocita[0]['FechaAgenda']."T".$infocita[0]['HorarioInicio'],
+		'end'			=> $infocita[0]['FechaAgenda']."T16:00:00",
+		'status'	=> '1',
+		'idTab_Agenda'=> $idAgenda
+	);
+
+	$add = new Agenda($this->dbAdapter);
+	$new = $add->add($addAgenda);
+
+	}
+	$agenda 	=	array($agenda_action);
+	$new			=	new JsonModel($agenda);
+	return $new;
+}
+
+public function citasAction(){
+	$this->dbAdapter	=	$this->getServiceLocator()->get('Zend\Db\Adapter');
+	$auth							= $this->auth;
+	@$identi					= $auth->getStorage()->read();
+
+	$agenda 				= new TabAgenda($this->dbAdapter);
+	$allcitas				=	$agenda->allcitas();
+
+	$info_citas	= array($allcitas);
+	$cita_info	= new JsonModel($info_citas);
+	//echo  json_encode($allcitas);
+	return $cita_info;
+}
 
 
 }

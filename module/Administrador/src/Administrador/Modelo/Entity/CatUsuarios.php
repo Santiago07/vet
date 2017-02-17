@@ -18,6 +18,7 @@ class CatUsuarios extends TableGateway{
 	public function allusuarios(){
 		$resultSet =	$this->select(function($select){
 			$select->Join("Cat_Empleado", "Cat_Usuarios.idCat_Empleado = Cat_Empleado.idCat_Empleado", array("NombreEmpleado" => "NombreEmpleado", "ApeEmpleado" => "ApeEmpleado"));
+			
 		});
 		return $resultSet->toArray();
 	}

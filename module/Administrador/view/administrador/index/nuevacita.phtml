@@ -1,0 +1,103 @@
+<div class="mobile" >
+  <div class="col-md-12 ">
+    <div class="panel panel-default" >
+      <div class="panel-heading"> <h1 class="panel-title text-center"> Nueva Cita </h1>
+      </div><br>
+      <form id="FormNuevaCita">
+        <div class="row">
+          <div class="form-group">
+            <div class="col-md-5 col-md-offset-1">
+              <input type="text" name="NombreCliente" class="form-control" list="cliente" required placeholder="Nombre de Cliente" id="Cli" onclick="clientes()" >
+              <datalist id="cliente" >
+              </datalist>
+              <input type="hidden" name="id_cliente" id="id_cliente" value="">
+              <input type="hidden" name="id_usuariocrea" value="<?php echo $this->Usr ?>">
+            </div>
+            <div class="col-md-4 col-md-offset-1">
+              <select class="form-control" name="idCat_Paciente" id="idCat_Paciente" required disabled>
+                <option value="">SELECCIONE</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:5%">
+            <div class="col-md-2 col-md-offset-1">
+              <select class="form-control" name="idCat_Sucursales" id="idCat_Sucursales">
+                <option value="">SUCURSAL</option>
+                <?php foreach($this->Sucuarsales as $Sucursales) { ?>
+                  <option value="<?php echo $Sucursales['idCat_Sucursales'] ?>"><?php echo $Sucursales['NombreSucursal'] ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-control" name="idCat_Espacio" id="idCat_Espacio" disabled>
+                <option value="">ESPACIO</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-control" name="idCat_UsuariosDestino" id="idCat_UsuariosDestino" >
+                <option value="">DOCTOR</option>
+                <?php foreach($this->Empleados as $dr) {?>
+                  <option value="<?php echo $dr['idCat_Usuarios'] ?>"><?php echo $dr['NombreEmpleado']." ".$dr['ApeEmpleado'] ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <input type="date" class="form-control" name="fecha" step="1" min="2000-01-01" max="2099-12-31">
+            </div>
+              <div class="col-md-2 ">
+                <input type="time" class="form-control" name="hora"  min="08:00" max="17:00">
+              </div>
+          </div>
+          <div class="form-group" style="margin-top:10%">
+            <div class="col-md-2 col-md-offset-1">
+              <select class="form-control" name="idCat_Servicio">
+                <option value="">Servicio</option>
+                <?php foreach($this->Servicios as $Servicios) { ?>
+                  <<option value="<?php echo $Servicios['idCat_Servicio'] ?>"><?php echo $Servicios['NombreServicio'] ?></option>
+                <?php } ?>
+              </select>
+            </div>
+            <div class="col-md-8">
+              <textarea class="form-control" name="motivo" rows="3" cols="80" placeholder="Motivo"></textarea>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:20%">
+            <div class="col-md-2 col-md-offset-5">
+              <button class="btn btn-success" type="submit" name="button">Agendar</button><br><br>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="" id="error">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="<?php echo $this->basePath()?>/js/Agenda/NuevaCita.js"></script>
+
+<style media="screen">
+.mobile {
+  margin-top: 3%;
+}
+@media screen and  (max-width : 768px){
+  .mobile{
+    margin-top: 25%;
+  }
+@media screen and (max-width : 768px) and (orientation : landscape){
+    .mobile{
+      margin-top: 12%;
+    }
+}
+@media screen  and  (min-device-width : 768px) and (max-device-width : 1024px){
+    .mobile{
+      margin-top: 7%;
+    }
+
+}
+@media screen and (min-device-width: 1024px) and (orientation : landscape){
+    .mobile{
+      margin-top: 3%;
+    }
+}
+</style>

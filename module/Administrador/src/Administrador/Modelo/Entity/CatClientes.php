@@ -48,6 +48,7 @@ class CatClientes extends TableGateway{
 	public function clientePaciente(){
 		$resultSet = $this->select(function($select){
 			$select->columns(array("idCat_Cliente"=>"idCat_Cliente", "Nombre"=>"NombreCliente", "Apellidos"=>"ApeCliente"));
+			$select->Where("idCat_Cliente != '2'");
 		});
 		return $resultSet->toArray();
 	}
